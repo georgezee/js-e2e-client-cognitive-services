@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+#result {
+  font-size: 30px;
+  padding: 20px;
+}
+
+.Pinyin-result {
+  font-size: 19px;
+}
+
+img {margin:20px}
+
+
