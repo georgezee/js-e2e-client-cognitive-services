@@ -52,7 +52,7 @@ function App() {
           <div>{chineseCharacters}</div>
           <div class="Pinyin-result">{displayText}</div>
         </div>
-        {/* {PrettyPrintJson(analysis)} */}
+        <div class="Json-result">{PrettyPrintJson(analysis)}</div>
       </div>
     )
   };

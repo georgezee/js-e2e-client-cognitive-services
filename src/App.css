@@ -46,6 +46,10 @@
   font-size: 19px;
 }
 
+.Json-result {
+  display: none;
+}
+
 img {margin:20px}
 
 
