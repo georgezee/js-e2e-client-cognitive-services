@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { computerVision, isConfigured as ComputerVisionIsConfigured } from './azure-cognitiveservices-computervision';
+import { WebcamCapture} from './components/Webcam/Webcam'
 
 function App() {
 
@@ -93,6 +94,9 @@ function App() {
             <br/>
           </div>
           <button onClick={onFileUrlEntered}>Analyze</button>
+          <div>
+            <WebcamCapture/>
+          </div>
         </div>
       }
       {processing && <div>Processing</div>}
