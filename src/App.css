@@ -7,6 +7,20 @@
   pointer-events: none;
 }
 
+div.word_result {
+  margin-right: 5px;
+  padding: 3px 20px;
+  border-bottom: solid #ccc 1px;
+}
+div.chars {
+  width: 250px;
+  display: inline-block;
+}
+div.pinyin {
+  display: inline-block;
+  font-size: 80%;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

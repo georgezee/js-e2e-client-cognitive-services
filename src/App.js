@@ -36,21 +36,44 @@ function App() {
   const DisplayResults = () => {
     //console.log(analysis);
 
-    var chineseCharacters = analysis.text.readResults[0].lines[0].text;
-    console.log("tttext:");
-    console.log(chineseCharacters);
     var pinyin = require("pinyin");
-    var pinyinResult = pinyin(chineseCharacters);
-    var displayText = pinyinResult.join(" ");
-    console.log(pinyinResult);
+    var chineseLines = analysis.text.readResults[0].lines;
+
+    var allChinese = "";
+    var allText = [];
+
+    var displayText = "";
+    for (const [key, line] of Object.entries(chineseLines)) {
+      console.log(key, line);
+      var chineseCharacters = line.text;
+      var pinyinResult = pinyin(chineseCharacters);
+      displayText = pinyinResult.join(" ");
+
+      var resultLine = {'chars': chineseCharacters, 'pinyin': displayText};
+      // Skip the line if no Chinese characters are present (the pinyin version is the same as the input).
+      if (chineseCharacters !== displayText) {
+        allText.push(resultLine);
+      }
+    }
+    console.log(allText);
     console.log(displayText);
 
     return (
       <div>
         <div><img src={analysis.URL} height="200" border="1" alt={(analysis.description && analysis.description.captions && analysis.description.captions[0].text ? analysis.description.captions[0].text : "can't find caption")} /></div>
-        <div id="result">
-          <div>{chineseCharacters}</div>
-          <div class="Pinyin-result">{displayText}</div>
+        <div  id="result">
+          {allText.map((el,index)=> {<p key={index}>aaaa{el}</p>})}
+          {
+            allText.map((line)=>{
+              console.log(line);
+              return (
+                <div className='word_result'>
+                  <div className='chars'>{line.chars}</div>
+                  <div className='pinyin'>{line.pinyin}</div>
+                </div>
+              )
+            })
+          }
         </div>
         <div class="Json-result">{PrettyPrintJson(analysis)}</div>
       </div>
