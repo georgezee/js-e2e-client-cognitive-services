@@ -29,6 +29,22 @@ function App() {
 
   };
 
+  const onImageCapture = (blob) => {
+    console.log("Image captured:");
+    console.log(blob);
+
+    //  Hold UI
+    setProcessing(true);
+    setAnalysis(null);
+
+    computerVision(blob || null).then((item) => {
+      // reset state/form
+      setAnalysis(item);
+      setFileSelected("");
+      setProcessing(false);
+    });
+  };
+
   // Display JSON data in readable format
   const PrettyPrintJson = (data) => {
     return (<div><pre>{JSON.stringify(data, null, 2)}</pre></div>);
@@ -39,8 +55,6 @@ function App() {
 
     var pinyin = require("pinyin");
     var chineseLines = analysis.text.readResults[0].lines;
-
-    var allChinese = "";
     var allText = [];
 
     var displayText = "";
@@ -61,7 +75,7 @@ function App() {
 
     return (
       <div>
-        <div><img src={analysis.URL} height="200" border="1" alt={(analysis.description && analysis.description.captions && analysis.description.captions[0].text ? analysis.description.captions[0].text : "can't find caption")} /></div>
+        <div><img src={imageUrl} height="200" border="1" alt={(analysis.description && analysis.description.captions && analysis.description.captions[0].text ? analysis.description.captions[0].text : "can't find caption")} /></div>
         <div  id="result">
           {allText.map((el,index)=> {<p key={index}>aaaa{el}</p>})}
           {
@@ -95,7 +109,7 @@ function App() {
           </div>
           <button onClick={onFileUrlEntered}>Analyze</button>
           <div>
-            <WebcamCapture/>
+            <WebcamCapture onSave={onImageCapture} />
           </div>
         </div>
       }

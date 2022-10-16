@@ -15,16 +15,20 @@ console.log(`key = ${key}`)
 console.log(`endpoint = ${endpoint}`)
 
 // Cognitive service features
+// const visualFeatures = [
+//     "ImageType",
+//     "Faces",
+//     "Adult",
+//     "Categories",
+//     "Color",
+//     "Tags",
+//     "Description",
+//     "Objects",
+//     "Brands"
+// ];
+
 const visualFeatures = [
-    "ImageType",
-    "Faces",
-    "Adult",
-    "Categories",
-    "Color",
-    "Tags",
-    "Description",
     "Objects",
-    "Brands"
 ];
 
 export const isConfigured = () => {
@@ -54,45 +58,41 @@ const wait = (timeout) => {
     });
 }
 
-// Analyze Image from URL
-export const computerVision = async (url) => {
+// Analyze Image from Blob
+export const computerVision = async (blobToAnalyze) => {
 
     // authenticate to Azure service
     const computerVisionClient = new ComputerVisionClient(
-        new ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': key } }), endpoint);
+        new ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': key, 'content-type':"application/octet-stream" } }), endpoint);
 
-    // get image URL - entered in form or random from Default Images
-    const urlToAnalyze = url || RandomImageUrl();
-    
-    // analyze image
-    const analysis = await computerVisionClient.analyzeImage(urlToAnalyze, { visualFeatures });
+    const analysis = await computerVisionClient.analyzeImageInStream(blobToAnalyze, { visualFeatures });
 
     // text detected - what does it say and where is it
     if (includesText(analysis.tags) || includesHandwriting(analysis.tags)) {
-        analysis.text = await readTextFromURL(computerVisionClient, urlToAnalyze);
+        analysis.text = await readTextFromURL(computerVisionClient, blobToAnalyze);
     }
 
     // all information about image
-    return { "URL": urlToAnalyze, ...analysis};
+    return { "Blob": blobToAnalyze, ...analysis};
 }
 // analyze text in image
 const readTextFromURL = async (client, url) => {
-    
-    let result = await client.read(url);
+
+    let result = await client.readInStream(url);
     let operationID = result.operationLocation.split('/').slice(-1)[0];
 
     // Wait for read recognition to complete
     // result.status is initially undefined, since it's the result of read
     const start = Date.now();
     console.log(`${start} -${result?.status} `);
-    
+
     while (result.status !== "succeeded") {
         await wait(500);
         console.log(`${Date.now() - start} -${result?.status} `);
         result = await client.getReadResult(operationID);
     }
-    
-    // Return the first page of result. 
+
+    // Return the first page of result.
     // Replace[0] with the desired page if this is a multi-page file such as .pdf or.tiff.
-    return result.analyzeResult; 
+    return result.analyzeResult;
 }

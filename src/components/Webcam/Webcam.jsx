@@ -35,7 +35,7 @@ function dataURItoBlob(dataURI) {
     return blob;
 }
 
-export const WebcamCapture = () => {
+export const WebcamCapture = ({onSave}) => {
 
     const [image,setImage]=useState('');
     const webcamRef = React.useRef(null);
@@ -47,6 +47,7 @@ export const WebcamCapture = () => {
             console.log("Image blob:");
             console.log(blob);
             setImage(imageSrc);
+            onSave(blob);
         });
 
 
