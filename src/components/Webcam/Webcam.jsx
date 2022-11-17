@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Webcam from "react-webcam";
 
-const WebcamComponent = () => <Webcam />;
+// const WebcamComponent = () => <Webcam />;
 
 const videoConstraints = {
     width: 220,
@@ -48,7 +48,7 @@ export const WebcamCapture = ({onSave}) => {
             console.log(blob);
             setImage(imageSrc);
             onSave(blob);
-        });
+        }, [onSave]);
 
 
     return (

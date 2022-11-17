@@ -72,12 +72,12 @@ function App() {
     }
     console.log(allText);
     console.log(displayText);
+    var imageUrl = "";
 
     return (
       <div>
         <div><img src={imageUrl} height="200" border="1" alt={(analysis.description && analysis.description.captions && analysis.description.captions[0].text ? analysis.description.captions[0].text : "can't find caption")} /></div>
         <div  id="result">
-          {allText.map((el,index)=> {<p key={index}>aaaa{el}</p>})}
           {
             allText.map((line)=>{
               console.log(line);
